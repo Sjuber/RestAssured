@@ -6,6 +6,7 @@
 package facades;
 
 import dtos.PersonDTO;
+import entities.Address;
 import entities.Person;
 import exceptions.PersonNotFoundException;
 import java.util.ArrayList;
@@ -118,18 +119,38 @@ public class PersonFacade {
         EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
 
         EntityManager em = emf.createEntityManager();
+
+        Person p1 = new Person("Mary", "Jane", "42424242", new Date());
+        Person p2 = new Person("Peter", "Parker", "81680085", new Date());
+        Person p3 = new Person("Mariylyn", "Manson", "12243647", new Date());
+        Person p4 = new Person("Johnny", "Jones", "17178893", new Date());
+
+        Address a1 = new Address("Adolfstreet 4", 2839, "Copenhagen");
+        Address a2 = new Address("Junglegade 7", 3456, "Junglen");
+        Address a3 = new Address("Islandsgade 18", 4720, "Islands Brygge");
+        Address a4 = new Address("Århusgade 15", 4513, "Suppa Suop");
+
+        
+        p1.setAddress(a1);
+        p2.setAddress(a2);
+        p3.setAddress(a3);
+        p4.setAddress(a4);
+        
         try {
             em.getTransaction().begin();
+
             em.createQuery("DELETE from Person").executeUpdate();
-            em.persist(new Person("Mariylyn", "Manson", "12243647", new Date()));
-            em.persist(new Person("Peter", "Parker", "81680085", new Date()));
-            em.persist(new Person("Mary", "Jane", "42424242", new Date()));
+            em.createQuery("DELETE from Address").executeUpdate();
+            
+
+            em.persist(p1);
+            em.persist(p2);
+            em.persist(p3);
+            em.persist(p4);
 
             em.getTransaction().commit();
         } finally {
             em.close();
-
         }
     }
-
 }
